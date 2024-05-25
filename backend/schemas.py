@@ -13,22 +13,22 @@ class CategoriaBase(Enum):
     categoria7 = "ISOLAMENTO"
     categoria8 = "SEGURANÇA"
 
-class ProductBase(BaseModel):
+class MaterialBase(BaseModel):
     material: str
     categoria: str
     localização_material: str
     quantidade: PositiveFloat
 
     @validator("categoria")
-    def check_categoria(cls, v)
+    def check_categoria(cls, v):
         if v in [item.value for item in CategoriaBase]:
             return v
         raise ValueError("Categoria Inválida")
 
-class ProductCreate(ProductBase):
+class MaterialCreate(MaterialBase):
     pass
 
-class ProductResponse(ProductBase):
+class MaterialResponse(MaterialBase):
     id: int
     created_at: datetime
 
@@ -36,5 +36,18 @@ class ProductResponse(ProductBase):
         orm_mode = True
 
         
+class MaterialUpdate(BaseModel):
+    material: Optional[str] = None
+    categoria: Optional[str] = None
+    localização_material: Optional[str] = None
+    quantidade: Optional[PositiveFloat] = None
+
+    @validator("categoria")
+    def check_categoria(cls, v):
+        if v is None:
+            return v
+        if v in [item.value for item in CategoriaBase]:
+            return v
+        raise ValueError("Categoria Inválida")
 
 
